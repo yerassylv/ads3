@@ -1,7 +1,22 @@
+package Hash;
+
+import java.util.ArrayList;
+import java.util.List;
+
 public class MyHashTable <K,V>{
-    public class HashNode<K,V>{
-        private K key;
+    public List<K> getKeyList(List<V> studentList) {
+        List<K> keyList = new ArrayList<>();
+        for (V value : studentList) {
+            keyList.add(getKey(value));
+        }
+        return keyList;
+    }
+
+    public static class  HashNode<K,V>{
+        private final K key;
         private V value;
+        public HashNode<K,V> next;
+
         public HashNode(K key,V value){
             this.key = key;
             this.value = value;
