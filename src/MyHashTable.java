@@ -34,18 +34,88 @@ public class MyHashTable <K,V>{
         return index;
     }
     public void put(K key, V value){
+        int index = hash(key);
+        if (chainArray[index] == null){
+            chainArray[index] = new HashNode<K,V>(key,value);
+        }else{
+            HashNode<K,V> current = chainArray[index];
+            while (current != null){
+                if(current.key.equals(key)){
+                    current.value = value;
+                    return;
+
+                }
+                current = current.next;
+            }
+            HashNode<K,V> newNode = new HashNode<K,V>(key,value);
+            newNode.next = chainArray[index];
+            chainArray[index] = newNode;
+        }
+        size++;
 
     }
     public V get(K key){
+        int index = hash(key);
+        HashNode<K, V> current = chainArray[index];
+        while (current != null) {
+            if (current.key.equals(key)) {
+                return current.value;
+            }
+            current = current.next;
+        }
+        return null;
 
     }
     public V remove(K key){
+        int index = hash(key);
+        HashNode<K, V> current = chainArray[index];
+        if (current != null && current.key.equals(key)) {
+            chainArray[index] = current.next;
+            size--;
+            return current.value;
+        }
+        while (current.next != null) {
+            if (current.next.key.equals(key)) {
+                HashNode<K, V> temp = current.next;
+                current.next = current.next.next;
+                size--;
+                return temp.value;
+            }
+            current = current.next;
+        }
+        return null;
 
     }
+    public int getSize(){
+        return size;
+    }
+    public int getCapacity(){
+        return capacity;
+    }
     public boolean containsKey(V value){
+        for (int i = 0; i < capacity; i++) {
+            HashNode<K, V> current = chainArray[i];
+            while (current != null) {
+                if (current.value.equals(value)) {
+                    return true;
+                }
+                current = current.next;
+            }
+        }
+        return false;
 
     }
     public K getKey(V value){
+        for (HashNode<K, V> node : chainArray) {
+            HashNode<K, V> current = node;
+            while (current != null) {
+                if (current.value.equals(value)) {
+                    return current.key;
+                }
+                current = current.next;
+            }
+        }
+        return null;
 
     }
 }
